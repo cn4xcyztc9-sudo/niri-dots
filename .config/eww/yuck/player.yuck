@@ -1,0 +1,52 @@
+(defwidget player []
+  (box
+    :class "player-box"
+    :space-evenly false
+    (box
+      :class "cover"
+      :style "background-image: url('${track.artUrl}');")
+    (box 
+      :orientation "v"
+      :valign "center"
+      (box
+        :class "meta"
+        :orientation "v"
+        :valign "end"
+        :hexpand true
+        :space-evenly false
+        (label
+          :class "timeline"
+          :xalign 1
+          :valign "start"
+          :text timeline)
+          (box
+            :orientation "h" 
+            :space-evenly false
+            (label 
+              :class "title"
+              :text {track.title}
+              :xalign 0
+              :limit-width 17))
+        (label
+          :class "artist"
+          :xalign 0
+          :text {track.artist}
+          :limit-width 17))
+      (box
+        :class "controls"
+        :orientation "h"
+        :space-evenly false
+        :spacing "-2"
+        (button
+          :class {(player_state.shuffle == "On") ? "shuffle active" : "shuffle"}
+          :onclick "./scripts/player.sh shuffle-toggle" "")
+        (button
+          :class "prev"
+          :onclick "./scripts/player.sh previous" "")
+        (button
+          :class "play"
+          :onclick "./scripts/player.sh play-pause"
+          "${player_state.status == 'Playing' ? '' : ''}")
+        (button
+          :class "next"
+          :onclick "./scripts/player.sh next" "")))))

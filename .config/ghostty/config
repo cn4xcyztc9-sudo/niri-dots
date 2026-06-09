@@ -1,0 +1,10 @@
+font-family = Liga SFMono Nerd Font
+font-family = Font Awesome 6 Pro Solid
+font-size = 12
+window-padding-x = 36
+window-padding-y = 20
+theme = Everforest Dark Hard
+gtk-custom-css = ~/.config/ghostty/hide-titlebar-stuff.css
+command = /usr/bin/fish --login --interactive
+custom-shader = shaders/cursor_warp.glsl
+quit-after-last-window-closed = true

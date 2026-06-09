@@ -1,0 +1,38 @@
+(defcfg
+    process-unmapped-keys yes
+    danger-enable-cmd yes
+    linux-device-detect-mode keyboard-only
+)
+
+(defsrc
+    caps esc tab q w e r t h j k l ; ' [ ]
+    1 2 3 4 5 6 7 8 9 0 - =
+)
+
+(deflayer default
+    @cap @ewwclose _ _ _ _ _ _ _ _ _ _ _ _ _ _
+    _ _ _ _ _ _ _ _ _ _ _ _
+)
+
+(deflayer arrows
+    _ S-grv @vol-mute @vol-dwn @vol-up @media-prev @media-pp @media-next left down up right pgdn pgup home end
+    f1 f2 f3 f4 f5 f6 f7 f8 f9 f10 f11 f12
+)
+
+(defvirtualkeys
+    start-vol-up  (cmd bash -c "while true; do wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1; sleep 0.15; done & echo $! > /tmp/kanata-volup.pid")
+    stop-vol-up   (cmd bash -c "kill $(cat /tmp/kanata-volup.pid) 2>/dev/null; rm -f /tmp/kanata-volup.pid")
+    start-vol-dwn (cmd bash -c "while true; do wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-; sleep 0.15; done & echo $! > /tmp/kanata-voldwn.pid")
+    stop-vol-dwn  (cmd bash -c "kill $(cat /tmp/kanata-voldwn.pid) 2>/dev/null; rm -f /tmp/kanata-voldwn.pid")
+)
+
+(defalias
+    cap      (tap-dance 150 ((layer-while-held arrows) caps))
+    ewwclose (multi esc (cmd bash -c "if eww get cc_open | grep -q true || eww get nc_open | grep -q true; then eww update cc_open=false nc_open=false unrevealer_open=false; fi"))
+    vol-mute   (cmd bash -c "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+    vol-dwn    (multi (on-press-fakekey start-vol-dwn tap) (on-release-fakekey stop-vol-dwn tap))
+    vol-up     (multi (on-press-fakekey start-vol-up tap) (on-release-fakekey stop-vol-up tap))
+    media-prev (cmd bash -c "playerctl previous")
+    media-pp   (cmd bash -c "playerctl play-pause")
+    media-next (cmd bash -c "playerctl next")
+)

@@ -1,0 +1,194 @@
+@define-color base     #1e2326;
+@define-color surface0 #272e33;
+@define-color surface1 #2e383c;
+@define-color surface2 #374145;
+@define-color overlay0 #414b50;
+@define-color overlay1 #859289;
+@define-color subtext  #9da9a0;
+@define-color text     #d3c6aa;
+@define-color accent   #d699b6;
+@define-color red      #e67e80;
+@define-color green    #a7c080;
+@define-color yellow   #dbbc7f;
+
+@define-color window_bg_color            @base;
+@define-color window_fg_color            @text;
+@define-color view_bg_color              @base;
+@define-color view_fg_color              @text;
+@define-color accent_bg_color            @accent;
+@define-color accent_fg_color            @base;
+@define-color headerbar_bg_color         @surface0;
+@define-color headerbar_fg_color         @text;
+@define-color headerbar_backdrop_color   @base;
+@define-color popover_bg_color           @surface0;
+@define-color popover_fg_color           @view_fg_color;
+@define-color dialog_bg_color            @surface1;
+@define-color dialog_fg_color            @view_fg_color;
+@define-color card_bg_color              @surface0;
+@define-color card_fg_color              @view_fg_color;
+@define-color sidebar_bg_color           @base;
+@define-color sidebar_fg_color           @text;
+@define-color sidebar_backdrop_color     @window_bg_color;
+@define-color sidebar_shade_color        rgba(0, 0, 0, 0.25);
+@define-color sidebar_border_color       rgba(0, 0, 0, 0.36);
+@define-color destructive_bg_color       @red;
+@define-color success_bg_color           @green;
+@define-color warning_bg_color           @yellow;
+@define-color error_bg_color             @red;
+@define-color theme_selected_bg_color    @accent_bg_color;
+
+.dialog-action-area button label,
+.dialog-action-area button {
+  color: @text;
+}
+
+tooltip.csd decoration {
+  box-shadow: none;
+}
+
+.maximized decoration,
+.fullscreen decoration {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.ssd decoration {
+  box-shadow: 0 0 0 1px mix(white, @window_bg_color, 0.82);
+}
+
+.ssd decoration:backdrop {
+  box-shadow: 0 0 0 1px mix(white, @window_bg_color, 0.95);
+}
+
+.ssd.maximized decoration,
+.ssd.maximized decoration:backdrop {
+  box-shadow: none;
+}
+
+.solid-csd decoration {
+  box-shadow:
+    inset 0 0 0 5px alpha(currentColor, 0.5),
+    inset 0 0 0 4px @headerbar_bg_color,
+    inset 0 0 0 1px alpha(currentColor, 0.5);
+}
+
+.solid-csd decoration:backdrop {
+  box-shadow: inset 0 0 0 3px @window_bg_color;
+}
+
+.background.csd,
+.background.maximized,
+.background.solid-csd {
+  border-radius: 0;
+}
+
+headerbar {
+  border-bottom: none;
+  border-radius: 0;
+  padding: 0 8px;
+}
+
+headerbar .title {
+  color: transparent;
+}
+
+/* buttons left */
+/* .titlebutton {
+  margin: 0 -1px 0 8px;
+  padding: 0;
+} */
+
+/* buttons right */
+.titlebutton {
+  margin: 0 8px 0 -1px;
+  padding: 0;
+}
+
+.titlebutton > image {
+  color: transparent;
+}
+
+button.titlebutton {
+  border-radius: 100px;
+  color: transparent;
+  min-height: 16px;
+  min-width: 16px;
+  transition: 250ms;
+}
+
+button.titlebutton:hover {
+  min-height: 20px;
+  min-width: 20px;
+}
+
+/* focused */
+button.titlebutton.close,
+button.titlebutton.maximize,
+.maximized button.titlebutton.maximize {
+  background-color: @accent;
+}
+
+button.titlebutton.minimize {
+  background-color: @accent;
+  opacity: 0;
+}
+
+button.titlebutton.close:hover,
+button.titlebutton.maximize:hover,
+button.titlebutton.minimize:hover,
+.maximized button.titlebutton.maximize:hover {
+  background-color: mix(white, @accent, 0.5);
+}
+
+button.titlebutton.close:active,
+button.titlebutton.maximize:active,
+button.titlebutton.minimize:active,
+.maximized button.titlebutton.maximize:active {
+  background-color: mix(white, @accent, 0.3);
+}
+
+/* unfocused */
+button.titlebutton:backdrop {
+  opacity: 1;
+}
+
+button.titlebutton:backdrop.close,
+button.titlebutton:backdrop.maximize,
+button.titlebutton:backdrop.minimize,
+.maximized button.titlebutton:backdrop.maximize {
+  background-color: mix(@headerbar_bg_color, @headerbar_fg_color, 0.2);
+}
+
+button.titlebutton:backdrop.close:hover,
+button.titlebutton:backdrop.maximize:hover,
+button.titlebutton:backdrop.minimize:hover,
+.maximized button.titlebutton:backdrop.maximize:hover {
+  background-color: mix(white, @accent, 0.5);
+}
+
+button.titlebutton:backdrop.close:active,
+button.titlebutton:backdrop.maximize:active,
+button.titlebutton:backdrop.minimize:active,
+.maximized button.titlebutton:backdrop.maximize:active {
+  background-color: mix(white, @accent, 0.3);
+}
+
+.content-view {
+  background: @base;
+}
+
+revealer > overlay > widget {
+  background: @surface0;
+}
+
+slider {
+  background: @subtext;
+}
+
+highlight {
+  background-color: alpha(@subtext, 0.6);
+}
+
+trough {
+  min-height: 6px;
+}

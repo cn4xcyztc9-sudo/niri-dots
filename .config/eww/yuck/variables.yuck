@@ -1,0 +1,51 @@
+(defpoll current_theme :interval "420h" "cat ~/.config/theme/current")
+
+(deflisten bar_state :initial '{
+    "workspaces":       [],
+    "active_workspace": 0,
+    "title":            "",
+    "icon":             "application-x-executable"
+  }'
+  "NIRI_MONITOR=DP-2 ./scripts/niribar.sh state")
+
+(deflisten systray-count "./scripts/sysinfo.sh systray")
+(defvar revealsystray true)
+
+(defvar unrevealer_open false)
+(defvar cc_open false)
+(defvar nc_open false)
+(defvar show_date false)
+
+(defpoll time :interval "1s" "date '+%a %I:%M %p'")
+(defpoll date :interval "1m" "date '+%Y-%m-%d'")
+
+(defpoll color_accent1 :interval "420h" "grep 'accent1' ./themes/active-theme.scss | grep -oE '#[0-9a-fA-F]{3,8}' | head -1")
+(defpoll color_surface2 :interval "420h" "grep 'surface2' ./themes/active-theme.scss | grep -oE '#[0-9a-fA-F]{3,8}' | head -1")
+
+(defpoll wifi_icon :interval "5s" "sh ./scripts/sysinfo.sh wifi")
+(defpoll wifi_state :interval "5s" "nmcli radio wifi | grep -oE 'enabled|disabled'")
+(defpoll bluetooth_state :interval "5s" "rfkill list bluetooth | grep -q 'Soft blocked: no' && echo 'on' || echo 'off'")
+(defpoll bluelight_state :interval "5s" "./scripts/sysinfo.sh bluelight --status")
+(defpoll idle_status :interval "5s" "./scripts/idleinhibit.sh")
+
+(deflisten track "./scripts/player.sh track")
+(deflisten player_state "./scripts/player.sh player-state")
+(deflisten timeline "./scripts/player.sh timeline")
+
+(deflisten volume "./scripts/sysinfo.sh volume listen")
+(deflisten volume_muted "./scripts/sysinfo.sh volume listen-muted")
+(defpoll brightness :interval "420h" "./scripts/sysinfo.sh brightness get")
+
+(deflisten notifications :initial '{
+    "count": 0,
+    "dnd": false,
+    "notifications": [],
+    "popups": []
+    }'
+    "python3 -u ./scripts/notifcatch.py"
+)
+
+(defvar show_events false)
+(defvar syncing false)
+(defvar sync_angle 0)
+(deflisten calendar_data "python3 ./scripts/calmanager.py generate --watch")

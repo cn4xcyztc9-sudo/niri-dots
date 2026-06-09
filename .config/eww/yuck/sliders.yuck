@@ -1,0 +1,42 @@
+(defwidget volume []
+  (box
+    :class "vol"
+    :orientation "h"
+    :space-evenly false
+    (box
+      :space-evenly false
+      (button
+        :class "vol-icon"
+        :onclick "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        :onrightclick "env XDG_CURRENT_DESKTOP=GNOME gnome-control-center sound &"
+        (label
+          :text {
+            volume_muted == "yes" ? "":
+            volume == 0  ? "":
+            volume <= 32 ? "":
+            volume <= 65 ? "": ""})))
+    (scale
+      :class "scale"
+      :value volume
+      :tooltip "${volume}%"
+      :onchange "wpctl set-volume @DEFAULT_AUDIO_SINK@ {}% -l 1"
+      :min 0
+      :max 100)))
+
+(defwidget brightness []
+  (box
+    :class "bright"
+    :orientation "h"
+    :space-evenly false
+    (label
+      :class "bright-icon"
+      :text {
+        brightness <= 49 ? "" :
+        brightness <= 50 ? "" : ""})
+    (scale
+      :class "scale"
+      :value brightness
+      :tooltip "${brightness}%"
+      :onchange "${EWW_CMD} update brightness={} && ./scripts/sysinfo.sh brightness set {}"
+      :min 1
+      :max 101)))

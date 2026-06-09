@@ -1,0 +1,68 @@
+(defwidget popup-notif [n context]
+  (eventbox
+    :onrightclick "scripts/notifmanage.sh --dismiss ${n.id}"
+    (box
+      :orientation "v"
+      :space-evenly false
+      (eventbox
+        :onclick "scripts/notifmanage.sh --show ${n.id}"
+      (box
+        :class "notif-content"
+        :orientation "h"
+        :space-evenly false
+        (box
+          :class "notif-image"
+          :valign "start"
+          :style "background-image: url('${n.image}'); background-size: cover; background-position: center;"
+          :visible {n.image != "null" && n.image != ""})
+        (image
+          :class "notif-icon"
+          :valign "center"
+          :path {n.icon}
+          :visible {(n.image == "null" || n.image == "") && n.icon != "null" && n.icon != ""})
+        (box
+          :orientation "v"
+          :space-evenly false
+          :hexpand true
+          (box
+            :orientation "h"
+            (label
+              :class "notif-app"
+              :halign "start"
+              :hexpand true
+              :xalign 0
+              :truncate true
+              :text {n.app ?: "Notification"})
+            (label
+              :class "notif-time"
+              :halign "end"
+              :valign "start"
+              :text {n.time}))
+          (label
+            :xalign 0
+            :style "font-weight: 600;"
+            :wrap true
+            :wrap-mode "char"
+            :markup "${n.summary}")
+          (label
+            :xalign 0
+            :wrap true
+            :wrap-mode "char"
+            :visible {n.body != "null" && n.body != ""}
+            :text {n.body}))))
+      (box
+        :class "actions-box"
+        :orientation "h"
+        :visible {n.actions != "[]" && n.actions != "null"}
+        (for action in {n.actions}
+          (button
+            :class {"action " + context}
+            :visible {action[0] != "default"}
+            :onclick "./scripts/notifmanage.sh --invoke ${n.id} ${action[0]}"
+            {action[1]}))))))
+
+(defwidget notiflog-notif [n]
+  (eventbox
+    :class "log-item"
+    :onrightclick "./scripts/notifmanage.sh --close ${n.id}"
+    (popup-notif :n n :context "log")))

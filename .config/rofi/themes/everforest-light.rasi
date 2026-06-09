@@ -1,0 +1,10 @@
+* {
+    base     : #efebd4;
+    surface0 : #fdf6e3;
+    surface1 : #e6e2cc;
+    overlay1 : #bdc3af;
+    subtext  : #708089;
+    text     : #5c6a72;
+    accent   : #df69ba;
+    urgent   : #f85552;
+}

@@ -1,0 +1,35 @@
+layout {
+    insert-hint {
+        color "#d699b6"
+    }
+
+    border {
+        active-color "#d699b6"
+        inactive-color "#bdc3af"
+    }
+}
+
+overview {
+    backdrop-color "#a6b0a0"
+}
+
+layer-rule {
+    match namespace="^waybar$"
+    match namespace="eww-bar"
+    shadow {
+        color "#0004"
+    }
+}
+
+layer-rule {
+    match namespace="rofi"
+    shadow {
+        color "#0004"
+    }
+}
+
+recent-windows {
+    highlight {
+        active-color "#d699b6"
+    }
+}

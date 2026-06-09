@@ -1,0 +1,186 @@
+.calendar-window {
+  background: $base;
+  border-radius: 16px;
+  box-shadow: 0 1px 6px 4px rgba(0, 0, 0, 0.3);
+  color: $text;
+  margin: 16px;
+
+  .cal-box {
+    background: $surface0;
+    border-radius: 8px;
+    margin: 20px;
+  }
+
+  .cal-header-box {
+    border-bottom: 1px solid $surface2;
+    margin: 0 12px;
+
+    .cal-header {
+      font-size: 1.25rem;
+      font-weight: 600;
+      transition: 250ms;
+
+      &:focus,
+      &:hover {
+        color: $subtext;
+      }
+    }
+
+    .cal-actions {
+      background: $surface1;
+      border-radius: 50px;
+      margin: 12px 0;
+
+      button {
+        margin: 2px;
+        padding: 6px 10px;
+      }
+    }
+
+    .cal-btn {
+      border-radius: 50px;
+      transition: 500ms;
+
+      &:focus,
+      &:hover {
+        background: $overlay0;
+      }
+    }
+  }
+
+  .grid {
+    background: transparent;
+    margin-bottom: -8px;
+    padding: 20px 6px;
+
+    .weekdays {
+      color: $accent2;
+      margin-top: -8px;
+      padding-bottom: 8px;
+    }
+
+    .week {
+      min-height: 32px;
+    }
+
+    .day {
+      background: transparent;
+      font-weight: 600;
+      margin: 0 8px;
+      transition: 250ms;
+
+      &:focus,
+      &:hover,
+      &.selected {
+        background: $surface2;
+        border: none;
+        border-radius: 4px;
+        margin: 0 6px;
+        padding: 0;
+      }
+
+      &.today {
+        background: $accent1;
+        border: 0;
+        border-radius: 4px;
+        color: $fuck;
+        margin: 2px 8px;
+        padding: 0;
+      }
+
+      &.selected,
+      &.today.selected {
+        background: $overlay1;
+        border: none;
+        color: $fuck;
+        margin: 0 6px;
+        padding: 0;
+      }
+
+      &.has-event {
+        border-bottom: 2px solid $overlay1;
+        margin-bottom: 2px;
+        padding-top: 4px;
+
+        &:focus,
+        &:hover,
+        &.selected {
+          border: none;
+          margin: 0 6px;
+          padding: 0;
+        }
+
+        &.today {
+          background: $accent1;
+          border: none;
+          border-radius: 4px;
+          margin: 2px 8px;
+          padding: 0;
+        }
+      }
+
+      &.filler {
+        background: transparent;
+        color: $overlay1;
+        font-weight: normal;
+
+        &.selected,
+        &:focus,
+        &:hover {
+          background: $surface2;
+          border: none;
+          border-radius: 4px;
+          margin: 0 6px;
+          padding: 0;
+        }
+      }
+    }
+    .day.today:hover,
+    .day.today:focus {
+      background: $accent1;
+      margin: 0 6px;
+      padding: 0;
+    }
+  }
+
+  .events {
+    min-height: 220px;
+    padding: 12px;
+
+    .placeholder {
+      color: $subtext;
+    }
+
+    .event {
+      &.today {
+        color: $accent1;
+      }
+
+      .date {
+        color: $subtext;
+        font-weight: 600;
+      }
+
+      .event-btn {
+        background: $surface1;
+        border-radius: 8px;
+        padding: 8px;
+        transition: 500ms;
+
+        &:focus {
+          background: $overlay0;
+        }
+      }
+
+      .title {
+        font-weight: 600;
+        margin-right: -48px;
+        min-height: 20px;
+      }
+
+      .time {
+        color: $accent1;
+      }
+    }
+  }
+}

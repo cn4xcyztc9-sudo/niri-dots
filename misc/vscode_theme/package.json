@@ -1,0 +1,21 @@
+{
+  "name": "untitled",
+  "displayName": "Untitled",
+  "description": "untitled custom theme",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.107.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Untitled",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Untitled-color-theme.json"
+      }
+    ]
+  }
+}

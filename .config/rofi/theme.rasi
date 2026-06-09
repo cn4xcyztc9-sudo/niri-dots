@@ -1,0 +1,32 @@
+@theme "./config.rasi"
+
+configuration {
+    show-icons: false;
+}
+
+window {
+    location: center;
+    width: 32%;
+}
+
+entry {
+    enabled: false;
+}
+
+listview {
+    lines: 6;
+    margin: 20px;
+}
+
+mode-switcher {
+    enabled: false;
+}
+
+element {
+    orientation: horizontal;
+    children: [ element-text, element-icon ];
+}
+
+element-text {
+    expand: true;
+}

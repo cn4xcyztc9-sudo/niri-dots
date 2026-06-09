@@ -1,0 +1,30 @@
+.toggles-box {
+  background: $surface0;
+  border-radius: 8px;
+  padding: 16px 0 16px 20px;
+
+  .toggle,
+  .toggle-icon,
+  .toggle image {
+    transition: 250ms;
+  }
+
+  .toggle {
+    margin: 4px 20px 4px 0;
+
+    &:focus,
+    &:hover,
+    &.off:hover {
+      opacity: .5;
+    }
+
+    &.on .toggle-icon {
+      color: $fuck;
+    }
+  }
+
+  .toggle-icon {
+    color: $subtext;
+    font-size: 1.5rem;
+  }
+}

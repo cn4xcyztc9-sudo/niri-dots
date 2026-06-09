@@ -1,0 +1,123 @@
+(defwidget John []
+  (box
+    :class "cal-box"
+    :orientation "v"
+    :space-evenly false
+    (box
+      :class "cal-header-box"
+      :spacing 8
+      :orientation "h"
+      :space-evenly false
+      (button
+        :class "cal-header"
+        :onclick "rm -f /tmp/eww-selected-date /tmp/eww-calendar-month; ${EWW_CMD} update calendar_data=\"\$(python3 ./scripts/calmanager.py generate)\" &"
+        (label :text {calendar_data.header} :halign "start"))
+      (box
+        :class "cal-actions"
+        :hexpand true
+        :halign "end"
+        :spacing "-2"
+        (button
+          :class "cal-btn"
+          :onclick "${EWW_CMD} update show_events=${!show_events}; rm -f /tmp/eww-selected-date /tmp/eww-calendar-month; ${EWW_CMD} update calendar_data=\"\$(python3 ./scripts/calmanager.py generate)\" &"
+          "")
+      (button
+       :class "cal-btn"
+       :onclick {syncing ? "" : "bash -c './scripts/sync-events.sh' &"}
+       :onrightclick "bash -c 'pid=$(cat /tmp/eww-sync.pid 2>/dev/null); [ -n \"$pid\" ] && kill \"$pid\"; rm -f /tmp/eww-sync.pid; ${EWW_CMD} update sync_angle=0 syncing=false' &"
+       (transform
+         :rotate sync_angle
+         :transform-origin-x "50%"
+         :transform-origin-y "50%"
+         (label :text "")))
+      (button
+        :class "cal-btn"
+        :onclick "bash -c './scripts/create-event-dialog.sh' &"
+        "")))
+    (stack
+      :selected {show_events ? 1 : 0}
+      :transition "slideleft"
+      (eventbox
+        :onscroll "python3 ./scripts/calmanager.py change-month {}"
+        (calendar-grid))
+      (calendar-events-view))))
+
+(defwidget calendar-grid []
+  (box
+    :class "grid"
+    :orientation "v"
+    :space-evenly false
+    (box
+      :class "weekdays"
+      :orientation "h"
+      :space-evenly true
+        (label :text "S")
+        (label :text "M")
+        (label :text "T")
+        (label :text "W")
+        (label :text "T")
+        (label :text "F")
+        (label :text "S"))
+    (for week in {calendar_data.weeks ?: []}
+      (box
+        :class "week"
+        :orientation "h"
+        :space-evenly true
+        (for day in week
+          (calendar-day
+            :day day
+            :year {calendar_data.year}
+            :month {calendar_data.month}))))))
+
+(defwidget calendar-day [day year month]
+  (eventbox
+    :tooltip "${day.has_event ? day.titles : ''}"
+    (button
+      :class "day${day.type == 'filler' ? ' filler' : ''}${day.is_today == true ? ' today' : ''}${day.has_event == true ? ' has-event' : ''}${day.is_selected == true ? ' selected' : ''}"
+      :onclick "python3 ./scripts/calmanager.py select ${day.type == 'filler' ? (day.day > 15 ? (month == 1 ? year - 1 : year) : (month == 12 ? year + 1 : year)) : year} ${day.type == 'filler' ? (day.day > 15 ? (month == 1 ? 12 : month - 1) : (month == 12 ? 1 : month + 1)) : month} ${day.day} &"
+      "${day.day}")))
+
+(defwidget calendar-events-view []
+  (box
+    :class "events"
+    :orientation "v"
+    :space-evenly false
+    :spacing 12
+    (scroll
+      :vscroll true
+      :hscroll false
+      :height 208
+      (box
+        :orientation "v"
+        :space-evenly false
+        :spacing 14
+        (box
+          :visible {arraylength(calendar_data.upcoming ?: []) == 0}
+          :vexpand true
+          (label
+            :class "placeholder"
+            :text "Sync your calendar to see events here"
+            :justify "center"
+            :wrap true))
+        (for event in {calendar_data.upcoming ?: []}
+          (box
+            :class "event${event.date == 'Today' ? ' today' : ''}"
+            :orientation "v"
+            :space-evenly false
+            :spacing 4
+            (label
+              :class "date"
+              :text {event.date}
+              :halign "start")
+            (button
+              :class "event-btn"
+              (box
+                (label
+                  :class "title"
+                  :text {event.title}
+                  :halign "start"
+                  :limit-width 20)
+                (label
+                  :class "time"
+                  :text {event.time ?: ""}
+                  :halign "end")))))))))

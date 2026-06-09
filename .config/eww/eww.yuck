@@ -1,0 +1,161 @@
+(include "yuck/variables.yuck")
+(include "yuck/toggles.yuck")
+(include "yuck/player.yuck")
+(include "yuck/sliders.yuck")
+(include "yuck/calendar.yuck")
+(include "yuck/bar.yuck")
+(include "yuck/notifications.yuck")
+
+(defwindow overview-bar
+  :monitor 0
+  :stacking "bg"
+  :geometry (geometry :anchor "bottom center"
+                      :y "-60px"
+                      :width "100%"
+                      :height "60px")
+  (box :class "overview-bar"))
+
+(defwindow bar
+  :monitor 0
+  :namespace "eww-bar"
+  :exclusive true
+  :stacking "fg"
+  :geometry (geometry :anchor "bottom center" 
+                      :width "100%"
+                      :height "56px")
+  (bar))
+
+(defwindow unrevealer
+  :monitor 0
+  :namespace "eww-unrevealer"
+  :focusable false
+  :stacking "fg"
+  :geometry (geometry :anchor "bottom center"
+                      :width "100%"
+                      :height 0)
+  (revealer
+    :reveal unrevealer_open
+    :transition "none"
+    (button
+      :height 1080
+      :onclick "${EWW_CMD} update cc_open=false nc_open=false unrevealer_open=false & pkill rofi")))
+  
+(defwindow control-center
+  :monitor 0
+  :namespace "eww-cc"
+  :focusable "ondemand"
+  :stacking "overlay"
+  :geometry (geometry :anchor "bottom right")
+  (revealer
+    :reveal cc_open
+    :transition "slideup"
+    :duration "300ms"
+    (box
+      :orientation "v"
+      :space-evenly false
+      :halign "end"
+      :valign "end"
+      (player-window)
+      (box
+        :class "cc-window"
+        :orientation "v"
+        :space-evenly false
+        (box
+          :class "sliders-box"
+          :orientation "v"
+          :space-evenly false
+        (volume)
+        (brightness))
+        (toggles)))))
+
+(defwidget player-window []
+  (box
+    :style "margin-bottom: -16px;"
+    (revealer
+      :reveal {track.title != ""}
+      :transition "slideup"
+      :duration "300ms"
+      (box
+        :class "player-window"
+        (player)))))
+
+(defwindow notifications
+  :geometry (geometry :width 400 :anchor "top center")
+  :monitor 0
+  :stacking "overlay"
+  :namespace "eww-notif"
+  (revealer
+    :reveal {arraylength(notifications.popups) > 0}
+    :transition "slidedown"
+    :duration "300ms"
+    (box
+      :class "notif-popup"
+      :orientation "v"
+      :space-evenly false
+      (for n in {notifications.popups}
+        (popup-notif :n n :context "popup")))))
+
+(defwindow notiflog
+  :monitor 0
+  :namespace "eww-notiflog"
+  :focusable "ondemand"
+  :stacking "overlay"
+  :geometry (geometry :anchor "center right" :width 0)
+  (revealer
+    :reveal nc_open
+    :transition "slideleft"
+    :duration "300ms"
+    (box
+      :orientation "v"
+      :space-evenly false
+      :halign "end"
+      (box
+        :class "notif-center"
+        :orientation "v"
+        :space-evenly false
+        :width 396
+        (box
+          :class "notif-header"
+          :orientation "h"
+          :space-evenly false
+          :spacing 8
+          (box
+            :halign "start"
+            :hexpand true
+            {"Notifications" + (notifications.count > 0 ? " (" + notifications.count + ")" : "")})
+          (button
+            :halign "end"
+            :class {"dnd-btn" + (notifications.dnd ? " on" : " off")}
+            :onclick "./scripts/notifmanage.sh --toggle"
+            "")
+          (button
+            :halign "end"
+            :class "clear-btn"
+            :onclick "./scripts/notifmanage.sh --clear"
+            "Clear All"))
+        (overlay
+          (scroll
+            :vscroll true
+            :height 554
+            (box
+              :orientation "v"
+              :space-evenly false
+              :spacing 8
+              :style "padding-bottom: 40px;"
+              (box
+                :visible {notifications.count < 1}
+                :orientation "v"
+                :vexpand true
+                :valign "center"
+                (image
+                  :path {"./images/" + current_theme + ".svg"}
+                  :image-width 248
+                  :image-height 248))
+              (for n in {notifications.notifications}
+                (notiflog-notif :n n))))
+          (box
+            :class "scroll-fade"
+            :valign "end")))
+      (box
+        :class "calendar-window"
+        (John)))))

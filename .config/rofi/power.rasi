@@ -1,0 +1,19 @@
+@theme "./config.rasi"
+
+window {
+    location: center;
+    width: 30%;
+}
+
+listview {
+    lines: 6;
+    margin: 20px;
+}
+
+entry {
+    enabled: false;
+}
+
+mode-switcher {
+    enabled: false;
+}

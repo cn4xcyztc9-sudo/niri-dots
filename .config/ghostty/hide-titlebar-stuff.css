@@ -1,0 +1,8 @@
+splitbutton.image-button, headerbar button.image-button.toggle {
+  opacity: 0;
+  transition: 250ms;
+}
+
+splitbutton.image-button:hover, headerbar button.image-button.toggle:hover {
+  opacity: 1;
+}

@@ -1,0 +1,237 @@
+:root {
+  --base    : #eceff4;
+  --surface0: #ffffff;
+  --surface1: #eceff4;
+  --surface2: #a5abb6;
+  --overlay0: #a5abb6;
+  --overlay1: #6d7a96;
+  --subtext : #434c5e;
+  --text    : #3b4252;
+  --accent  : #81a1c1;
+  --red     : #bf616a;
+  --green   : #a3be8c;
+  --yellow  : #ebcb8b;
+}
+
+@define-color base     #eceff4;
+@define-color surface0 #ffffff;
+@define-color surface1 #e5e9f0;
+@define-color surface2 #a5abb6;
+@define-color overlay0 #a5abb6;
+@define-color overlay1 #6d7a96;
+@define-color subtext  #434c5e;
+@define-color text     #3b4252;
+@define-color accent   #81a1c1;
+@define-color red      #bf616a;
+@define-color green    #a3be8c;
+@define-color yellow   #ebcb8b;
+
+@define-color window_bg_color                  @base;
+@define-color window_fg_color                  @text;
+@define-color view_bg_color                    @base;
+@define-color view_fg_color                    @text;
+@define-color accent_bg_color                  @accent;
+@define-color accent_fg_color                  @base;
+@define-color headerbar_bg_color               @surface0;
+@define-color headerbar_fg_color               @text;
+@define-color headerbar_backdrop_color         #eeeeee;
+@define-color popover_bg_color                 @surface0;
+@define-color popover_fg_color                 @view_fg_color;
+@define-color dialog_bg_color                  @surface1;
+@define-color dialog_fg_color                  @view_fg_color;
+@define-color card_bg_color                    @surface1;
+@define-color card_fg_color                    @view_fg_color;
+@define-color sidebar_bg_color                 @surface0;
+@define-color sidebar_fg_color                 @view_fg_color;
+@define-color sidebar_backdrop_color           @window_bg_color;
+@define-color sidebar_shade_color              rgba(0, 0, 0, 0.25);
+@define-color sidebar_border_color             rgba(0, 0, 0, 0.36);
+@define-color secondary_sidebar_bg_color       @view_bg_color;
+@define-color secondary_sidebar_fg_color       @view_fg_color;
+@define-color secondary_sidebar_backdrop_color @view_bg_color;
+@define-color secondary_sidebar_shade_color    rgba(0, 0, 0, 0.25);
+@define-color secondary_sidebar_border_color   rgba(0, 0, 0, 0.36);
+@define-color destructive_bg_color             @red;
+@define-color success_bg_color                 @green;
+@define-color warning_bg_color                 @yellow;
+@define-color error_bg_color                   @red;
+
+:root {
+  --accent-bg-color:                   var(--accent);
+  --accent-fg-color:                   var(--base);
+  --accent-blue:                       var(--accent);
+  --accent-green:                      var(--accent);
+  --accent-orange:                     var(--accent);
+  --accent-pink:                       var(--accent);
+  --accent-purple:                     var(--accent);
+  --accent-red:                        var(--accent);
+  --accent-slate:                      var(--accent);
+  --accent-teal:                       var(--accent);
+  --accent-yellow:                     var(--accent);
+  --card-bg-color:                     var(--surface0);
+  --card-fg-color:                     var(--text);
+  --destructive-bg-color:              var(--red);
+  --dialog-bg-color:                   var(--surface1);
+  --dialog-fg-color:                   var(--text);
+  --error-bg-color:                    var(--red);
+  --headerbar-backdrop-color:          @headerbar_backdrop_color;
+  --headerbar-bg-color:                var(--surface0);
+  --headerbar-fg-color:                var(--text);
+  --popover-bg-color:                  var(--surface1);
+  --popover-fg-color:                  var(--text);
+  --secondary-sidebar-backdrop-color:  var(--base);
+  --secondary-sidebar-bg-color:        var(--base);
+  --secondary-sidebar-border-color:    @secondary_sidebar_border_color;
+  --secondary-sidebar-fg-color:        var(--text);
+  --secondary-sidebar-shade-color:     @secondary_sidebar_shade_color;
+  --sidebar-backdrop-color:            var(--base);
+  --sidebar-bg-color:                  var(--surface0);
+  --sidebar-border-color:              @sidebar_border_color;
+  --sidebar-fg-color:                  var(--text);
+  --sidebar-shade-color:               @sidebar_shade_color;
+  --success-bg-color:                  var(--green);
+  --view-bg-color:                     var(--base);
+  --view-fg-color:                     var(--text);
+  --warning-bg-color:                  var(--yellow);
+  --window-bg-color:                   var(--base);
+  --window-fg-color:                   var(--text);
+}
+
+window {
+  border-radius: 0px;
+}
+
+window.csd {
+  border-radius: 0px;
+  outline: none;
+}
+
+headerbar .title {
+  color: transparent;
+}
+
+headerbar .titlebar {
+  background-color: transparent;
+}
+
+windowcontrols.start { margin-left: 5px; }
+windowcontrols.end   { margin-right: 5px; }
+
+windowcontrols > button {
+  filter: none;
+  min-height: 16px;
+  min-width: 16px;
+}
+
+windowcontrols > button > image {
+  color: transparent;
+  min-height: 16px;
+  min-width: 16px;
+  padding: 0;
+  transition: 250ms;
+}
+
+windowcontrols > button > image:hover {
+  color: transparent;
+  min-height: 20px;
+  min-width: 20px;
+}
+
+/* focused */
+windowcontrols > button.close > image,
+windowcontrols > button.maximize > image,
+windowcontrols > button.minimize > image,
+.maximized windowcontrols > button.maximize > image {
+  background-color: var(--accent);
+}
+
+windowcontrols > button.close:hover > image,
+windowcontrols > button.maximize:hover > image,
+windowcontrols > button.minimize:hover > image,
+.maximized windowcontrols > button.maximize:hover > image {
+  background-color: color-mix(in srgb, white 50%, var(--accent));
+}
+
+windowcontrols > button.close:active > image,
+windowcontrols > button.maximize:active > image,
+windowcontrols > button.minimize:active > image,
+.maximized windowcontrols > button.maximize:active > image {
+  background-color: color-mix(in srgb, white 70%, var(--accent));
+}
+
+/* unfocused */
+windowcontrols > button:backdrop.close > image,
+windowcontrols > button:backdrop.maximize > image,
+windowcontrols > button:backdrop.minimize > image,
+.maximized windowcontrols > button:backdrop.maximize > image {
+  background-color: var(--overlay1);
+}
+
+windowcontrols > button:backdrop.close:hover > image,
+windowcontrols > button:backdrop.maximize:hover > image,
+windowcontrols > button:backdrop.minimize:hover > image,
+.maximized windowcontrols > button:backdrop.maximize:hover > image {
+  background-color: color-mix(in srgb, white 50%, var(--accent));
+}
+
+windowcontrols > button:backdrop.close:active > image,
+windowcontrols > button:backdrop.maximize:active > image,
+windowcontrols > button:backdrop.minimize:active > image,
+.maximized windowcontrols > button:backdrop.maximize:active > image {
+  background-color: color-mix(in srgb, white 70%, var(--accent));
+}
+
+celluloid-seek-bar {
+  min-height: 72px;
+}
+
+slider {
+  background-color: @subtext;
+}
+
+highlight {
+  background-color: alpha(@subtext, 0.6);
+}
+
+trough {
+  min-height: 6px;
+  min-width: 6px;
+}
+
+revealer {
+  box-shadow: none;
+}
+
+#NautilusPathBar {
+  background-color: var(--surface0);
+  border-radius: 8px;
+}
+
+calendar-view {
+  background-color: var(--surface0);
+}
+
+event {
+  background-color: var(--surface1);
+  border-radius: 4px;
+  color: var(--text);
+  margin: 0 4px;
+}
+
+widget.edge {
+  background-color: var(--overlay0);
+}
+
+.text-button:selected {
+  background-color: transparent;
+  color: var(--blue);
+}
+
+dimming {
+  background-color: #000;
+  opacity: 0.3;
+}
+
+toggle {
+  background: @overlay2;
+}

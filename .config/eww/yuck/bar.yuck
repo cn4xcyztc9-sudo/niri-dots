@@ -1,0 +1,128 @@
+(defwidget bar []
+  (box
+    (centerbox
+      :class "bar"
+      :orientation "h"
+      (left)
+      (center)
+      (right))))
+
+(defwidget left []
+  (box
+    :halign "start"
+    :space-evenly false
+    (workspaces)
+    (launcher)))
+
+(defwidget workspaces []
+  (eventbox
+    :onscroll "[ '{}' = 'up' ] && niri msg action focus-workspace-up || niri msg action focus-workspace-down"
+    (box
+      :class "workspaces"
+      :space-evenly false
+      :halign "start"
+      (for workspace in {bar_state.workspaces}
+        (button
+          :onclick "sh -c 'niri msg action focus-workspace ${workspace.id}'"
+          :class "item ${workspace.id == bar_state.active_workspace ? "focused" : ""} ${workspace.empty != "null" ? "occupied" : "empty"}"
+          "${workspace.id}")))))
+
+(defwidget launcher []
+  (eventbox
+    :cursor "pointer"
+    :onclick "rofi -show combi -drun-match-fields name -config ~/.config/rofi/launcher.rasi & ${EWW_CMD} update unrevealer_open=true"
+    (button
+      :class "launcher-btn"
+      :style "padding: 0 4px;"
+      :style "margin-left: 16px;"
+      "")))
+
+(defwidget center []
+  (eventbox
+    :onscroll "./scripts/niribar.sh change-window {}"
+    :cursor "all-scroll"
+    (window-title)))
+
+(defwidget window-title []
+  (box
+    :class "title-area"
+    :visible {bar_state.title != "" && bar_state.title != "null" && bar_state.icon != "zenity"}
+    (box
+      :class "title"
+      :space-evenly false
+      (image
+        :class "title-icon"
+        :icon {bar_state.icon}
+        :icon-size "large-toolbar")
+      (label
+        :limit-width 80
+        :show-truncated true
+        :text {bar_state.title}))))
+
+(defwidget right []
+  (box
+    :halign "end"
+    :space-evenly false
+    :spacing 8
+    (tray)
+    (box
+    (cc-button))
+    (clock)))
+
+(defwidget tray []
+  (box
+    :orientation "h"
+    :space-evenly false
+    (eventbox
+      :visible {(systray-count > 0)}
+      :onclick "${EWW_CMD} update revealsystray=${!revealsystray}"
+      :cursor "pointer"
+      (transform
+        :transform-origin-x "50%"
+        :transform-origin-y "50%"
+        :rotate {revealsystray ? 0 : 50}
+        (button
+          :style "margin: 0 16px 0  12px;"
+          :class "systray-btn" "")))
+    (revealer
+      :reveal revealsystray
+      :transition "slideleft"
+      (systray
+        :class "systray"
+        :prepend-new true
+        :spacing 16
+        :orientation "h"
+        :icon-size 20))))
+
+(defwidget cc-button []
+  (button
+    :class "cc-button ${cc_open ? 'open' : ''}"
+    :onclick "./open_cc.sh"
+    ""))
+
+(defwidget clock []
+  (button
+    :class "clock ${nc_open ? 'open' : ''}"
+    :onclick "./open_nc.sh"
+    :onrightclick "${EWW_CMD} update show_date=${!show_date}"
+    {show_date ? date : time}))
+
+; might use this somewhere
+; (defwidget dnd-switch []
+;   (box
+;     :orientation "h"
+;     :space-evenly false
+;     :halign "center"
+;     (label
+;       :class "dnd-switch-label"
+;       :text "Do Not Disturb")
+;     (box
+;       :class {"switch" + (notifications.dnd ? " switch--on" : " dnd-switch--off")}
+;       :halign "end"
+;       :orientation "h"
+;       :space-evenly false
+;       (eventbox
+;         :cursor "pointer"
+;         (button
+;           :class "switch-thumb"
+;           :onclick "./scripts/notifmanage.sh --toggle")))))

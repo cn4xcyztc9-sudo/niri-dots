@@ -1,0 +1,226 @@
+@import "~/.config/rofi/themes/active-theme.rasi"
+
+/**
+ * Author : Aditya Shakya (adi1090x)
+ * Github : @adi1090x
+ * 
+ * Rofi Theme File
+ * Rofi Version: 1.7.3
+ **/
+
+/*****----- Configuration -----*****/
+configuration {
+	modi                  : "combi,run,filebrowser,power:~/.config/rofi/power-menu.sh";
+    combi-modi            : "Pinned:~/.config/rofi/pinned.sh,drun";
+    combi-hide-mode-prefix: true;
+    icon-theme            : "Papirus-Dark";
+    show-icons            : true;
+    display-drun          : "";
+    display-combi         : "";
+    display-run           : "";
+    display-power         : "";
+    display-filebrowser   : "";
+	drun-display-format   : "{name}";
+	window-format         : "{w} · {c} · {t}";
+    kb-select-1           : "Control+1";
+    kb-select-2           : "Control+2";
+    kb-select-3           : "Control+3";
+    kb-select-4           : "Control+4";
+    kb-select-5           : "Control+5";
+    kb-select-6           : "Control+6";
+    drun {
+        DBusActivatable: false;
+    }
+    filebrowser {
+        show-hidden: true;
+    }
+}
+
+/*****----- Main Window -----*****/
+window {
+    /* properties for window widget */
+    transparency          : "real";
+    font                  : "SF Pro Rounded 12";
+    location              : south west;
+    fullscreen            : false;
+    width                 : 356px;
+    x-offset              : 16px;
+    y-offset              : -16px;
+
+    /* properties for all widgets */
+    enabled               : true;
+    border-radius         : 16px;
+    cursor                : "default";
+    background-color      : @base;
+}
+
+/*****----- Main Box -----*****/
+mainbox {
+    enabled               : true;
+    spacing               : 0;
+    background-color      : @base;
+    padding               : 0;
+    orientation           : vertical;
+    children              : [ "inputbar", "listbox" ];
+}
+
+listbox {
+    background-color      : transparent;
+    orientation           : vertical;
+    children              : [ "listview", "mode-switcher" ];
+}
+
+/*****----- Inputbar -----*****/
+inputbar {
+    enabled               : true;
+    background-color      : transparent;
+    background-image      : url("", width);
+    text-color            : @subtext;
+    orientation           : vertical;
+    children              : [ "prompt", "textbox-prompt-colon", "entry" ];
+}
+prompt {
+    background-color      : transparent;
+    font                  : "SF Pro Rounded SemiBold 12";
+    enabled               : false;
+    padding               : 10px 20px;
+    text-color            : @text;
+}
+textbox-prompt-colon {
+    enabled               : false;
+    expand                : false;
+    str                   : "";
+    padding               : 12px 12px 8px 12px;
+    border                : 0;
+    border-radius         : 8px;
+    border-color          : @surface1;
+    background-color      : @surface1;
+    text-color            : inherit;
+}
+entry {
+    enabled               : true;
+    expand                : true;
+    padding               : 8px 12px;
+    margin                : 20px 20px 0 20px;
+    border                : 0;
+    border-radius         : 8px;
+    background-color      : @surface0;
+    text-color            : @subtext;
+    cursor                : text;
+    cursor-color          : @accent;
+    placeholder           : "";
+    placeholder-markup    : true;
+    placeholder-color     : inherit;
+    hide-cursor-on-empty  : false;
+    horizontal-align      : 0;
+}
+
+/*****----- Mode Switcher -----*****/
+mode-switcher{
+    enabled               : true;
+    background-color      : transparent;
+    border-radius         : 0;
+    padding               : 10px 0 10px 0;
+    margin                : -2px 0 0 0;
+}
+button {
+    padding               : 8px;
+    background-color      : transparent;
+    text-color            : @overlay1;
+    cursor                : pointer;
+    font                  : "Font Awesome 6 Pro Solid 16";
+}
+button selected {
+    background-color      : transparent;
+    text-color            : @accent;
+}
+
+/*****----- Listview -----*****/
+/* there is a random 2px gap at the bottom */
+listview {
+    enabled               : true;
+    columns               : 1;
+    lines                 : 6;
+    cycle                 : true;
+    dynamic               : true;
+    scrollbar             : false;
+    layout                : vertical;
+    reverse               : false;
+    fixed-height          : true;
+    fixed-columns         : true;
+    padding               : 8px;
+    margin                : 16px 20px 0 20px;
+    spacing               : 8px;
+    background-color      : @surface0;
+    border-radius         : 8px;
+    text-color            : @subtext;
+    cursor                : "default";
+}
+
+/*****----- Elements -----*****/
+element {
+    enabled               : true;
+    padding               : 8px;
+    border-radius         : 4px;
+    background-color      : transparent;
+    text-color            : @subtext;
+    cursor                : pointer;
+}
+element normal.normal {
+    background-color      : inherit;
+    text-color            : inherit;
+}
+element normal.urgent {
+    background-color      : @urgent;
+    text-color            : @subtext;
+}
+element normal.active {
+    background-color      : @accent;
+    text-color            : @subtext;
+}
+element selected.normal {
+    background-color      : @surface1;
+    text-color            : @accent;
+    font                  : "SF Pro Rounded Bold 12";
+}
+element selected.urgent {
+    background-color      : @urgent;
+    text-color            : @subtext;
+}
+element selected.active {
+    background-color      : @urgent;
+    text-color            : @subtext;
+}
+element-icon {
+    background-color      : transparent;
+    text-color            : inherit;
+    size                  : 24px;
+    padding               : 0 8px 0 0;
+    cursor                : inherit;
+}
+element-text {
+    background-color      : transparent;
+    text-color            : inherit;
+    cursor                : inherit;
+    vertical-align        : 0.5;
+    horizontal-align      : 0.0;
+}
+
+/*****----- Message -----*****/
+message {
+    background-color      : transparent;
+}
+textbox {
+    padding               : 8px;
+    border-radius         : 8px;
+    background-color      : @surface0;
+    text-color            : @subtext;
+    vertical-align        : 0.5;
+    horizontal-align      : 0.0;
+}
+error-message {
+    padding               : 8px;
+    border-radius         : 8px;
+    background-color      : @base;
+    text-color            : @subtext;
+}

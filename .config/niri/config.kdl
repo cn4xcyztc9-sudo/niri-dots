@@ -1,0 +1,377 @@
+output "DP-2" {
+    mode "1920x1080@164.834"
+    scale 1.0
+    transform "normal"
+    variable-refresh-rate
+}
+
+input {
+    workspace-auto-back-and-forth
+    keyboard {
+        xkb {
+        }
+        numlock
+    }
+    mouse {
+        accel-profile "flat"
+        // scroll-factor 0.8
+    }
+    // warp-mouse-to-focus
+    focus-follows-mouse max-scroll-amount="0%"
+}
+
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+spawn-at-startup "/usr/lib/gsd-rfkill"
+spawn-at-startup "awww-daemon"
+spawn-at-startup "ydotoold"
+spawn-at-startup "idlewatch"
+spawn-at-startup "kanata_cmd"
+spawn-sh-at-startup "tailscale systray"
+spawn-sh-at-startup "wl-clip-persist --clipboard regular --reconnect-tries 0"
+spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
+spawn-sh-at-startup "ln -sfn ~/.config/eww_niri ~/.config/eww"
+spawn-sh-at-startup "eww open-many notifications bar overview-bar control-center notiflog unrevealer"
+spawn-sh-at-startup "swayidle -w timeout 900 'swaylock -f' timeout 915 'eww update brightness=1 && sysinfo.sh brightness set 1; powerprofilesctl set power-saver' resume 'eww update brightness=90 && sysinfo.sh brightness set 90; powerprofilesctl set performance' before-sleep 'swaylock -f'"
+
+// niri theme
+include "colors.kdl"
+
+environment {
+    GTK_THEME "fuck"
+    QT_QPA_PLATFORM "wayland"
+    SDL_VIDEODRIVER "wayland"
+    CLUTTER_BACKEND "wayland"
+    XDG_CURRENT_DESKTOP "niri:GNOME"
+}
+
+cursor {
+   xcursor-theme "xcursor-breeze-neutral"
+   xcursor-size 24
+    hide-when-typing
+    hide-after-inactive-ms 5000
+}
+
+layout {
+    tab-indicator {
+        width 20
+        gap 0
+        length total-proportion=0.2
+        position "left"
+    }
+
+    gaps 20
+    center-focused-column "on-overflow"
+    always-center-single-column
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    // default-column-width { proportion 0.66667; }
+
+    focus-ring {
+        off
+        width 12
+    }
+
+    border {
+        off
+        width 2
+    }
+
+    shadow {
+        on
+        draw-behind-window true
+        softness 17
+        spread 0
+        offset x=0 y=2
+    }
+}
+
+workspace "main" {
+    layout {
+        border {
+            off
+            width 2
+        }
+    }
+}
+
+workspace "2"
+workspace "3"
+workspace "4"
+
+gestures {
+    hot-corners {
+        // off
+        bottom-left
+    }
+}
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+overview {
+    zoom 0.5
+}
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+window-rule {
+    geometry-corner-radius 16
+    clip-to-geometry true
+    // open-floating true
+}
+
+// Open the Firefox picture-in-picture player as floating by default.
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
+    match app-id="io.github.celluloid_player.Celluloid"
+    open-maximized true
+    tiled-state true
+}
+
+window-rule {
+    match app-id="proton.vpn.app.gtk"
+    open-floating true
+    default-floating-position x=16 y=16 relative-to="bottom-right"
+    default-window-height { fixed 100; }
+}
+
+window-rule {
+    match app-id="Calculator"
+    open-floating true
+    min-height 50
+    max-height 50
+    min-width 50
+}
+
+// Example: block out two password managers from screen capture.
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    match app-id=r#"^org\.gnome\.World\.Secrets$"#
+
+    block-out-from "screen-capture"
+
+    // Use this instead if you want them visible on third-party screenshot tools.
+    // block-out-from "screencast"
+}
+
+layer-rule {
+    match namespace="eww-bar"
+    shadow {
+        on
+        softness 8
+        spread 3
+        offset x=0 y=0
+    }
+}
+
+layer-rule {
+    match namespace="rofi"
+    shadow {
+        on
+        softness 10
+        spread 6
+        offset x=0 y=2
+    }
+    geometry-corner-radius 16
+}
+
+layer-rule {
+    match namespace="eww-notiflog"
+    shadow {
+        off
+    }
+}
+
+binds {
+    // Mod+Shift+Slash { show-hotkey-overlay; }
+
+    Mod+T { spawn "ghostty" "+new-window"; }
+    Mod+B { spawn "firefox"; }
+    Mod+E { spawn "nautilus" "--new-window"; }
+    Mod+C { spawn "gnome-calculator"; }
+    Mod+Ctrl+C { spawn "bash" "-c" "rofi -show calc -modi calc -no-show-match -no-sort -calc-command \"echo -n '{result}' | wl-copy\" -config ~/.config/rofi/calc.rasi"; }
+    Alt+Space { spawn "bash" "-c" "rofi -show combi -drun-match-fields name -config ~/.config/rofi/launcher.rasi"; }
+    Mod+V { spawn "bash" "-c" "cliphist list | rofi -dmenu -i -config ~/.config/rofi/cliphist.rasi | cliphist decode | wl-copy"; }
+    Mod+Shift+V { spawn "bash" "-c" "rofi -modi emoji -show emoji -i -config ~/.config/rofi/emoji.rasi | cliphist decode | wl-copy"; }
+    Mod+Ctrl+V { spawn "switch-audio-output"; }
+    Mod+A { spawn "~/.config/eww_niri/open_cc.sh"; }
+    Mod+N { spawn "~/.config/eww_niri/open_nc.sh"; }
+    Mod+Shift+d { spawn "define"; }
+    Ctrl+Alt+T { spawn "~/.config/rofi/theme-picker.sh"; }
+
+    Mod+Escape { spawn "bash" "-c" "rofi -modi power:~/.config/rofi/power-menu.sh -show power -config ~/.config/rofi/power.rasi"; }
+    Ctrl+Shift+Escape { spawn "gtk-launch" "net.nokyan.Resources"; }
+
+    Mod+Ctrl+Shift+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+
+    // Mod+Shift+P { power-off-monitors; }
+
+    // XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }
+    // XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
+    // XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    // XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+
+    Mod+Tab { toggle-overview; }
+
+    Mod+Q { close-window; }
+
+    Mod+H     { focus-column-left; }
+    Mod+J     { focus-window-down; }
+    Mod+K     { focus-window-up; }
+    Mod+L     { focus-column-right; }
+
+    Mod+Ctrl+H     { move-column-left; }
+    Mod+Ctrl+J     { move-window-down; }
+    Mod+Ctrl+K     { move-window-up; }
+    Mod+Ctrl+L     { move-column-right; }
+
+    Mod+Semicolon  { focus-workspace-down; }
+    Mod+Apostrophe { focus-workspace-up; }
+
+    Mod+Ctrl+Semicolon  { move-column-to-workspace-down; }
+    Mod+Ctrl+Apostrophe { move-column-to-workspace-up; }
+
+    Mod+Shift+Semicolon    { move-workspace-down; }
+    Mod+Shift+Apostrophe   { move-workspace-up; }
+
+    Mod+Alt+H     { focus-monitor-left; }
+    Mod+Alt+J     { focus-monitor-down; }
+    Mod+Alt+K     { focus-monitor-up; }
+    Mod+Alt+L     { focus-monitor-right; }
+
+    Mod+Shift+H  { move-workspace-to-monitor-left; }
+    Mod+Shift+J  { move-workspace-to-monitor-down; }
+    Mod+Shift+K  { move-workspace-to-monitor-up; }
+    Mod+Shift+L  { move-workspace-to-monitor-right; }
+
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
+
+    Mod+BracketLeft  { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+
+    Mod+R { switch-preset-column-width; }
+    Mod+Ctrl+R { reset-window-height; }
+    Mod+Shift+R { expand-column-to-available-width; }
+
+    Mod+F { maximize-column; }
+    Mod+Shift+F { maximize-window-to-edges; }
+    Mod+Ctrl+F { fullscreen-window; }
+    Mod+Ctrl+Shift+F { toggle-windowed-fullscreen; }
+
+    Ctrl+Alt+Space { center-column; }
+
+    Mod+Minus { set-column-width "-2.5%"; }
+    Mod+Equal { set-column-width "+2.5%"; }
+
+    Mod+Shift+Minus { set-window-height "-2.5%"; }
+    Mod+Shift+Equal { set-window-height "+2.5%"; }
+
+    Mod+G       { toggle-window-floating; }
+    Mod+Shift+G { switch-focus-between-floating-and-tiling; }
+
+    Mod+Ctrl+Tab { toggle-column-tabbed-display; }
+
+    Print { spawn "bash" "-c" "snip"; }
+    Shift+Print { spawn "bash" "-c" "snip fullscreen"; }
+
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+
+    Mod+WheelScrollRight      { focus-column-right; }
+    Mod+WheelScrollLeft       { focus-column-left; }
+    Mod+Ctrl+WheelScrollRight { move-column-right; }
+    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
+
+    Mod+Shift+WheelScrollDown      { focus-column-right; }
+    Mod+Shift+WheelScrollUp        { focus-column-left; }
+    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+}
+
+animations {
+    workspace-switch {
+        spring damping-ratio=0.85 stiffness=700 epsilon=0.0001
+    }
+
+    horizontal-view-movement {
+         spring damping-ratio=0.85 stiffness=700 epsilon=0.0001
+    }
+
+    window-open {
+      duration-ms 175
+      curve "ease-out-quad"
+      custom-shader r"
+        vec4 zoom_in(vec3 coords_geo, vec3 size_geo) {
+          float progress = niri_clamped_progress;
+          float scale = progress;
+          vec2 coords = (coords_geo.xy - vec2(0.5, 0.5)) * size_geo.xy;
+          coords = coords / scale;
+          coords_geo = vec3(coords / size_geo.xy + vec2(0.5, 0.5), 1.0);
+          vec3 coords_tex = niri_geo_to_tex * coords_geo;
+          vec4 color = texture2D(niri_tex, coords_tex.st);
+          color.a *= progress;
+
+          return color;
+        }
+        vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+          return zoom_in(coords_geo, size_geo);
+        }
+      "
+    }
+
+    // Original by Lemmy: https://github.com/ItsLemmy
+    window-close {
+      duration-ms 200
+      curve "linear"
+      custom-shader r"
+        vec4 fall_and_rotate(vec3 coords_geo, vec3 size_geo) {
+          float progress = niri_clamped_progress * niri_clamped_progress;
+          vec2 coords = (coords_geo.xy - vec2(0.5, 1.0)) * size_geo.xy;
+          coords.y -= progress * 1440.0;
+          float random = (niri_random_seed - 0.5) / 2.0;
+          random = sign(random) - random;
+          float max_angle = 0.5 * random;
+          float angle = progress * max_angle;
+          mat2 rotate = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
+          coords = rotate * coords;
+          coords_geo = vec3(coords / size_geo.xy + vec2(0.5, 1.0), 1.0);
+          vec3 coords_tex = niri_geo_to_tex * coords_geo;
+          vec4 color = texture2D(niri_tex, coords_tex.st);
+          color.a *= (1.0 - progress);
+
+          return color;
+        }
+        vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+          return fall_and_rotate(coords_geo, size_geo);
+        }
+      "
+    }
+}

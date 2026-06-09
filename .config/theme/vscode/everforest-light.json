@@ -1,0 +1,13 @@
+{
+  "editor.background": "#efebd4",
+  "panel.background": "#efebd4",
+  "terminal.background": "#efebd4",
+  "titleBar.activeBackground": "#efebd4",
+  "titleBar.inactiveBackground": "#efebd4",
+  "editorGroupHeader.tabsBackground": "#efebd4",
+  "tab.inactiveBackground": "#efebd4",
+  "titleBar.border": "#efebd4",
+  "sideBar.background": "#efebd4",
+  "editorGroupHeader.noTabsBackground": "#efebd4",
+  "editor.selectionBackground": "#e0dcc7"
+}

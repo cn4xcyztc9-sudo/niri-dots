@@ -1,0 +1,94 @@
+"constant.character.escape" = "yellow"
+"type" = "blue"
+"constant" = "blue"
+"constant.numeric" = "blue"
+"string" = "green"
+"comment" = "subtle"
+"variable" = "subtext"
+"variable.builtin" = "blue"
+"variable.parameter" = "subtext"
+"variable.other.member" = "subtext"
+"label" = "green"
+"punctuation" = "subtle"
+"punctuation.delimiter" = "subtle"
+"punctuation.bracket" = "subtext"
+"keyword" = "purple"
+"operator" = "yellow"
+"function" = "green"
+"function.builtin" = "blue"
+"function.macro" = "teal"
+"tag" = "subtext"
+"namespace" = "teal"
+"attribute" = "subtext"
+"constructor" = "teal"
+"module" = "blue"
+"special" = "blue"
+
+"markup.heading.marker" = "subtle"
+"markup.heading.1" = { fg = "red", modifiers = ["bold"] }
+"markup.heading.2" = { fg = "yellow", modifiers = ["bold"] }
+"markup.heading.3" = { fg = "yellow", modifiers = ["bold"] }
+"markup.heading.4" = { fg = "green", modifiers = ["bold"] }
+"markup.heading.5" = { fg = "blue", modifiers = ["bold"] }
+"markup.heading.6" = { fg = "subtext", modifiers = ["bold"] }
+"markup.list" = "red"
+"markup.link.url" = { fg = "blue", modifiers = ["underlined"] }
+"markup.link.text" = "purple"
+"markup.quote" = "subtle"
+"markup.raw" = "green"
+
+"diff.plus" = "green"
+"diff.delta" = "yellow"
+"diff.minus" = "red"
+
+# Interface
+# "ui.background"= { bg = "" }
+"ui.cursor.primary" = { fg = "base", bg = "blue" }
+"ui.cursor.match" = "red"
+"ui.linenr" = "subtle"
+"ui.linenr.selected" = "subtext"
+"ui.statusline" = { fg = "subtext", bg = "surface2" }
+"ui.statusline.normal" = { fg = "base", bg = "blue" }
+"ui.statusline.insert" = { fg = "base", bg = "yellow" }
+"ui.statusline.select" = { fg = "base", bg = "teal" }
+"ui.cursorline" = { bg = "base" }
+"ui.popup" = { fg = "teal", bg = "base" }
+"ui.window" = "surface2"
+"ui.help" = { fg = "teal", bg = "base" }
+"ui.text" = "subtext"
+"ui.text.focus" = { bg = "surface2", fg = "subtext" }
+"ui.text.info" = "subtext"
+"ui.virtual.whitespace" = "surface2"
+"ui.virtual.ruler" = { bg = "base" }
+"ui.virtual.inlay-hint" = { fg = "yellow", bg = "surface2" }
+"ui.menu" = { fg = "subtext", bg = "base" }
+"ui.menu.selected" = { bg = "subtle", fg = "base" }
+"ui.selection" = { bg = "subtle" }
+"warning" = "yellow"
+"error" = { fg = "red", modifiers = ["bold"] }
+"info" = { fg = "blue", modifiers = ["bold"] }
+"hint" = { fg = "blue", modifiers = ["bold"] }
+"diagnostic" = { underline = { color = "subtext", style = "curl" } }
+"diagnostic.hint" = { underline = { color = "blue", style="curl"} }
+"diagnostic.info"= { underline = { color = "blue", style="curl"} }
+"diagnostic.warning"= { underline = { color = "yellow", style="curl"} }
+"diagnostic.error"= { underline = { color = "red", style="curl"} }
+"diagnostic.unnecessary" = { modifiers = ["dim"] }
+"diagnostic.deprecated" = { modifiers = ["crossed_out"] }
+# "ui.bufferline" = { fg = "subtle", bg = "" }
+"ui.bufferline.active" = { fg = "blue", bg = "surface2" }
+"ui.debug" = { fg = "yellow", bg = "base" }
+"ui.highlight.frameline" = { bg = "surface2" }
+"ui.virtual.jump-label" = { fg = "red", modifiers = ["italic", "bold"] }
+
+[palette]
+base = "#141415"
+surface2 = "#1b1b1b"
+subtle = "#636363"
+subtext = "#9e9e9e"
+red = "#b46762"
+green = "#89a275"
+yellow = "#d1c185"
+blue = "#7e9cb5"
+purple = "#927ba7"
+teal = "#c08da5"

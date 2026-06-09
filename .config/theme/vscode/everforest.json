@@ -1,0 +1,12 @@
+{
+  "editor.background": "#1e2326",
+  "panel.background": "#1e2326",
+  "terminal.background": "#1e2326",
+  "titleBar.activeBackground": "#1e2326",
+  "titleBar.inactiveBackground": "#1e2326",
+  "editorGroupHeader.tabsBackground": "#1e2326",
+  "tab.inactiveBackground": "#1e2326",
+  "titleBar.border": "#1e2326",
+  "sideBar.background": "#1e2326",
+  "editorGroupHeader.noTabsBackground": "#1e2326"
+}

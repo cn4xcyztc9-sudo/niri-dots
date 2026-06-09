@@ -1,0 +1,142 @@
+.notif-center {
+  background: $base;
+  border-radius: 16px;
+  box-shadow: 0 1px 6px 4px rgba(0, 0, 0, 0.3);
+  margin: 16px 16px 0;
+  padding: 28px 20px 0;
+
+  .notif-header {
+    border-bottom: 1px solid $surface2;
+    color: $text;
+    margin: -8px 0 12px;
+    padding-bottom: 16px;
+
+    label {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .clear-btn,
+    .dnd-btn {
+      background: $misc;
+      border-radius: 50px;
+      transition: 500ms;
+
+      &:hover,
+      &:focus {
+        background: $overlay0;
+      }
+    }
+
+    .clear-btn label {
+      font-size: .875rem;
+      min-height: 32px;
+      min-width: 16px;
+      padding: 0 12px;
+    }
+
+    .dnd-btn {
+      box-shadow: 0 2px 8px 4px $base;
+      color: $overlay1;
+      min-height: 32px;
+      min-width: 32px;
+
+      &.on {
+        background: $accent1;
+        color: $fuck;
+      }
+    }
+  }
+
+  .scroll-fade {
+    background: $base;
+    box-shadow: 0 0 8px 20px $base;
+    min-height: 12px;
+  }
+}
+
+.notif-popup {
+  background: $base;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px 4px rgba(0, 0, 0, 0.3);
+  color: $text;
+  margin: 16px;
+  padding: 8px;
+}
+
+.log-item {
+  background: $surface0;
+  border-radius: 8px;
+  color: $text;
+  margin: 12px;
+}
+
+.notif-content {
+  border-radius: 8px;
+  margin: -2px 0;
+  padding: 12px;
+
+  .notif-image,
+  .notif-icon {
+    border-radius: 4px;
+    margin: 2px 12px 2px 0;
+  }
+
+  .notif-image {
+    min-height: 72px;
+    min-width: 72px;
+  }
+
+  .notif-icon {
+    background: $surface2;
+    margin-right: 12px;
+    padding: 12px;
+  }
+
+  .notif-app,
+  .notif-time {
+    color: $subtext;
+    font-size: .75rem;
+  }
+
+  .notif-time {
+    margin-top: -2px;
+    padding-left: 4px;
+  }
+
+  .notif-app {
+    margin: -2px -40px 0 0;
+    padding-bottom: 4px;
+  }
+
+  .notif-box {
+    padding-bottom: 2px;
+  }
+}
+
+.actions-box {
+  padding-right: 12px;
+}
+
+.action {
+  border-radius: 4px;
+  color: $text;
+  font-size: .875rem;
+  margin: 0 0 12px 12px;
+  padding: 8px 0;
+  transition: 500ms;
+
+  &.popup {
+    background: $surface0;
+  }
+
+  &.log {
+    background: $surface1;
+  }
+
+  &:hover,
+  &:focus {
+    background: $overlay0;
+    color: $text;
+  }
+}

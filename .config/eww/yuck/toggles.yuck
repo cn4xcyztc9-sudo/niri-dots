@@ -1,0 +1,70 @@
+(defwidget toggles []
+  (box
+    :class "toggles-box"
+    :orientation "h"
+    :space-evenly false
+      (button
+        :class "toggle ${wifi_state == 'enabled' ? 'on' : 'off'}"
+        :onclick {wifi_state == "disabled" ? "${EWW_CMD} update wifi_state=enabled && nmcli radio wifi on" : "${EWW_CMD} update wifi_state=disabled && nmcli radio wifi off"}
+        :onrightclick "gnome-control-center wifi &"
+        (box
+          :orientation "h"
+          :space-evenly false
+          (overlay
+            (image
+              :path "images/squircle-4.svg"
+              :image-width 56
+              :image-height 56
+              :fill-svg {wifi_state == "disabled" ? color_surface2 : color_accent1})
+            (label
+              :class "toggle-icon"
+              :text wifi_icon))))
+
+    (button
+      :class "toggle ${bluetooth_state == 'on' ? 'on' : 'off'}"
+      :onclick {bluetooth_state == "on" ? "rfkill block bluetooth && ${EWW_CMD} update bluetooth_state=off" : "rfkill unblock bluetooth && ${EWW_CMD} update bluetooth_state=on"}
+      :onrightclick "gnome-control-center bluetooth &"
+      (box
+        :orientation "h"
+        :space-evenly false
+        (overlay
+          (image
+            :path "images/squircle-4.svg"
+            :image-width 56
+            :image-height 56
+            :fill-svg {bluetooth_state == "on" ? color_accent1 : color_surface2})
+          (label
+            :class "toggle-icon"
+            :text {bluetooth_state == "on" ? "" : ""}))))
+
+    (button
+      :class "toggle ${idle_status == 'on' ? 'on' : 'off'}"
+      :onclick {idle_status == "on" ? "scripts/idleinhibit.sh toggle && ${EWW_CMD} update idle_status=off" : "scripts/idleinhibit.sh toggle && ${EWW_CMD} update idle_status=on"}
+      (box
+        :orientation "h"
+        :space-evenly false
+        (overlay
+          (image
+            :path "images/squircle-4.svg"
+            :image-width 56
+            :image-height 56
+            :fill-svg {idle_status == "on" ? color_accent1 : color_surface2})
+          (label
+            :class "toggle-icon"
+            :text ""))))
+
+    (button
+      :class "toggle ${bluelight_state == 'on' ? 'on' : 'off'}"
+      :onclick {bluelight_state == "on" ? "scripts/sysinfo.sh bluelight --toggle && ${EWW_CMD} update bluelight_state=off" : "scripts/sysinfo.sh bluelight --toggle && ${EWW_CMD} update bluelight_state=on"}
+      (box
+        :orientation "h"
+        :space-evenly false
+        (overlay
+          (image
+            :path "images/squircle-4.svg"
+            :image-width 56
+            :image-height 56
+            :fill-svg {bluelight_state == "on" ? color_accent1 : color_surface2})
+          (label
+            :class "toggle-icon"
+            :text {bluelight_state == "on" ? "" : ""}))))))

@@ -1,0 +1,10 @@
+@theme "./config.rasi"
+
+window {
+    location: center;
+    width: 30%;
+}
+
+listview {
+    lines: 5;
+}

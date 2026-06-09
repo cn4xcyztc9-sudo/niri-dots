@@ -1,0 +1,19 @@
+theme = "everforest_dark_hard"
+[editor]
+color-modes = true
+line-number = "relative"
+bufferline = "always"
+auto-completion = true
+rainbow-brackets = true
+cursorline = true
+[editor.cursor-shape]
+insert = "bar"
+normal = "bar"
+select = "underline"
+[editor.file-picker]
+hidden = false
+[editor.indent-guides]
+character = "╎"
+render = true
+[editor.soft-wrap]
+enable = true

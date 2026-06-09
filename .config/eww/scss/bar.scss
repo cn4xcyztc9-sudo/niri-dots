@@ -1,0 +1,101 @@
+.bar {
+  background: $base;
+  margin: 0 4px;
+
+  .launcher-btn {
+    color: $subtext;
+    transition: 250ms;
+  }
+
+  .title-area {
+    padding: 0 100px;
+
+    .title {
+      color: $text;
+      font-weight: 600;
+
+      .title-icon {
+        padding-right: 8px;
+      }
+    }
+  }
+  .systray-btn {
+    color: $subtext;
+    font-size: .875rem;
+    transition: 250ms;
+  }
+
+  .systray {
+    padding: 0 16px 0 8px;
+  }
+
+  .cc-button {
+    background: $surface0;
+    border-radius: 8px;
+    color: $text;
+    margin: 8px 0;
+    min-width: 40px;
+    transition: 250ms;
+
+    &:hover,
+    &.open {
+      background: $misc;
+    }
+  }
+
+  .clock {
+    background: $surface0;
+    border-radius: 8px;
+    color: $text;
+    font-weight: 600;
+    margin: 8px 0;
+    min-width: 108px;
+    padding: 0 10px;
+    transition: 250ms;
+
+    &:hover,
+    &.open {
+      background: $misc;
+    }
+  }
+}
+
+.workspaces {
+  background: $surface0;
+  border-radius: 8px;
+  margin: 8px 0;
+  padding: 0 8px;
+
+  .item {
+    border-radius: 50px;
+    font-size: 0;
+    margin: 14px 6px;
+    min-width: 0;
+
+    &.item:hover {
+      background: $accent1;
+    }
+
+    &.occupied {
+      background: $accent1;
+      padding: 6px;
+    }
+
+    &.focused {
+      background: $accent1;
+      padding: 6px;
+      padding-right: 16px;
+    }
+
+    &.empty {
+      background: $overlay0;
+      padding: 6px;
+    }
+
+    &.empty.focused {
+      background: $overlay1;
+      padding: 6px;
+      padding-right: 16px;
+    }
+  }
+}

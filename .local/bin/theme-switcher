@@ -1,0 +1,405 @@
+#!/usr/bin/env bash
+
+# theme-switcher.sh --list           # list available themes
+# theme-switcher.sh --current        # print current theme
+# theme-switcher.sh <theme>          # switch to a specific theme
+
+CURRENT_THEME="${HOME}/.config/theme/current"
+
+GTK3_DIR="${HOME}/.config/gtk-3.0"
+GTK4_DIR="${HOME}/.config/gtk-4.0"
+FIREFOX_DIR=$(echo "${HOME}"/.config/mozilla/firefox/*.default-release)
+VSCODE_SETTINGS="${HOME}/.config/Code/User/settings.json"
+
+THEMES=(untitled nord nord-light everforest everforest-light)
+
+declare -A vscode_themes=(
+    [untitled]="Untitled"
+    [nord]="Nord"
+    [nord-light]="Nord Light"
+    [everforest]="Everforest Dark"
+    [everforest-light]="Everforest Light"
+)
+
+declare -A helix_themes=(
+    [untitled]="untitled"
+    [nord]="nord"
+    [nord-light]="nord_light"
+    [everforest]="everforest_dark_hard"
+    [everforest-light]="everforest_light"
+)
+
+declare -A ghostty_themes=(
+    [untitled]="untitled"
+    [nord]="Nord"
+    [nord-light]="Nord Light"
+    [everforest]="Everforest Dark Hard"
+    [everforest-light]="Everforest Light Med"
+)
+
+declare -A folder_icons=(
+    [untitled]="untitled"
+    [nord]="nord"
+    [nord-light]="nord"
+    [everforest]="everforest"
+    [everforest-light]="everforest"
+)
+
+declare -A darkreader_bg=(
+    [untitled]="#0d0d0d"
+    [nord]="#2e3440"
+    [everforest]="#1e2326"
+)
+declare -A darkreader_text=(
+    [untitled]="#e1e1e1"
+    [nord]="#eceff4"
+    [everforest]="#d3c6aa"
+)
+
+#############################################################
+# Helpers
+#############################################################
+
+get_current_theme() {
+    if [[ ! -f "$CURRENT_THEME" ]]; then
+        echo "ERROR: No current theme set. Run: theme-switcher <theme>" >&2
+        exit 1
+    fi
+    cat "$CURRENT_THEME"
+}
+
+save_current_theme() {
+    mkdir -p "$(dirname "$CURRENT_THEME")"
+    echo "$1" >"$CURRENT_THEME"
+}
+
+list_themes() {
+    echo "Available themes:"
+    local current
+    current=$(get_current_theme)
+    for t in "${THEMES[@]}"; do
+        if [[ "$t" == "$current" ]]; then
+            echo "  * $t  (current)"
+        else
+            echo "    $t"
+        fi
+    done
+}
+
+validate_theme() {
+    local requested="$1"
+    for t in "${THEMES[@]}"; do
+        [[ "$t" == "$requested" ]] && return 0
+    done
+    echo "ERROR: '$requested' is not a recognised theme. Run with --list to see available themes." >&2
+    exit 1
+}
+
+#############################################################
+# Switchers
+#############################################################
+
+apply_wallpaper() {
+    local theme="$1"
+    local wallpaper=("${HOME}/Pictures/Wallpapers/${theme}".*)
+
+    if [[ ! -f "${wallpaper[0]}" ]]; then
+        echo "WARNING: No wallpaper found for '$theme', skipping"
+        return
+    fi
+
+    echo "Applying wallpaper: ${wallpaper[0]}"
+    awww img "${wallpaper[0]}" --transition-type any --transition-duration 1
+}
+
+apply_gtk() {
+    local theme="$1"
+    echo "Applying GTK theme: $theme"
+    for dir in "$GTK3_DIR" "$GTK4_DIR"; do
+        local src="${dir}/${theme}.css"
+        [[ -f "$src" ]] || {
+            echo "WARNING: $src not found, skipping"
+            continue
+        }
+        ln -sf "$src" "${dir}/gtk.css"
+    done
+}
+
+apply_color_scheme() {
+    local theme="$1"
+    local scheme
+    if [[ "$theme" == *light* ]]; then
+        scheme="prefer-light"
+    else
+        scheme="prefer-dark"
+    fi
+    echo "Applying GNOME color scheme: $scheme"
+    gsettings set org.gnome.desktop.interface color-scheme "$scheme"
+}
+
+apply_niri() {
+    local theme="$1"
+    local src="${HOME}/.config/niri/themes/${theme}.kdl"
+    echo "Applying niri theme: $theme"
+    [[ -f "$src" ]] || {
+        echo "WARNING: $src not found, skipping"
+        return
+    }
+    ln -sf "$src" "${HOME}/.config/niri/colors.kdl"
+}
+
+apply_eww() {
+    local theme="$1"
+    local src="${HOME}/.config/eww/themes/${theme}.scss"
+
+    echo "Applying EWW theme: $theme"
+    [[ -f "$src" ]] || {
+        echo "WARNING: $src not found, skipping"
+        return
+    }
+
+    eww kill 2>/dev/null
+    sleep 0.3
+
+    ln -sf "$src" "${HOME}/.config/eww/themes/active-theme.scss"
+
+    eww open-many notifications bar overview-bar control-center notiflog unrevealer 2>/dev/null
+
+    eww update \
+        current_theme="${theme%-light}" \
+        color_accent1="$(grep accent1 "${HOME}/.config/eww/themes/active-theme.scss" | grep -oE '#[0-9a-fA-F]{3,8}' | head -1)" \
+        color_surface2="$(grep surface2 "${HOME}/.config/eww/themes/active-theme.scss" | grep -oE '#[0-9a-fA-F]{3,8}' | head -1)" 2>/dev/null
+}
+
+apply_swaylock() {
+    local theme="$1"
+    local src="${HOME}/.config/swaylock/themes/${theme}.conf"
+
+    if [[ ! -f "$src" ]]; then
+        echo "WARNING: No swaylock theme found at $src, skipping"
+        return
+    fi
+
+    echo "Applying swaylock theme: $theme"
+    ln -sf "$src" "${HOME}/.config/swaylock/config"
+}
+
+apply_ghostty() {
+    local theme="$1"
+    local ghostty_theme="${ghostty_themes[$theme]}"
+    local cfg="${HOME}/.config/ghostty/config"
+    echo "Applying Ghostty theme: $theme"
+    [[ -f "$cfg" ]] || {
+        echo "WARNING: Ghostty config not found, skipping"
+        return
+    }
+    sed -i "s/^theme = .*/theme = ${ghostty_theme}/" "$cfg"
+    pkill -USR2 ghostty
+}
+
+apply_firefox() {
+    local theme="$1"
+    echo "Applying Firefox theme: $theme"
+    for css_file in "${FIREFOX_DIR}/chrome/userChrome.css" "${FIREFOX_DIR}/chrome/userContent.css"; do
+        [[ -f "$css_file" ]] || {
+            echo "WARNING: $css_file not found, skipping"
+            continue
+        }
+        sed -i "s/@import url(\".*\")/@import url(\"${theme}.css\")/" "$css_file"
+    done
+}
+
+apply_darkreader() {
+    local theme="$1"
+    local bg="${darkreader_bg[$theme]:-}"
+    local text="${darkreader_text[$theme]:-}"
+    local db="${FIREFOX_DIR}/storage-sync-v2.sqlite"
+    if [[ -z "$bg" || -z "$text" ]]; then
+        echo "WARNING: No Dark Reader mapping for '$theme', skipping"
+        return
+    fi
+    [[ -f "$db" ]] || {
+        echo "WARNING: storage-sync-v2.sqlite not found, skipping"
+        return
+    }
+    echo "Applying Dark Reader theme: $theme"
+    sqlite3 "$db" "UPDATE storage_sync_data SET data = json_replace(data, '$.theme.darkSchemeBackgroundColor', '$bg') WHERE ext_id LIKE 'addon@darkreader.org';"
+    sqlite3 "$db" "UPDATE storage_sync_data SET data = json_replace(data, '$.theme.darkSchemeTextColor', '$text') WHERE ext_id LIKE 'addon@darkreader.org';"
+}
+
+apply_rofi() {
+    local theme="$1"
+    local src="${HOME}/.config/rofi/themes/${theme}.rasi"
+    echo "Applying Rofi theme: $theme"
+    [[ -f "$src" ]] || {
+        echo "WARNING: $src not found, skipping"
+        return
+    }
+    ln -sf "$src" "${HOME}/.config/rofi/themes/active-theme.rasi"
+}
+
+apply_wswitch() {
+    local theme="$1"
+    local src="${HOME}/.config/wswitch/themes/${theme}.ini"
+    if [[ ! -f "$src" ]]; then
+        src="${HOME}/.config/wswitch/themes/${theme%-light}.ini"
+    fi
+    echo "Applying wswitch theme: $theme"
+    [[ -f "$src" ]] || {
+        echo "WARNING: $src not found, skipping"
+        return
+    }
+    ln -sf "$src" "${HOME}/.config/wswitch/themes/active-theme.ini"
+    wswitch quit && wswitch --daemon
+}
+
+apply_helix() {
+    local theme="$1"
+    local helix_theme="${helix_themes[$theme]:-}"
+    local cfg="${HOME}/.config/helix/config.toml"
+    if [[ -z "$helix_theme" ]]; then
+        echo "WARNING: No Helix mapping for '$theme', skipping"
+        return
+    fi
+    echo "Applying Helix theme: $helix_theme"
+    [[ -f "$cfg" ]] || {
+        echo "WARNING: Helix config not found, skipping"
+        return
+    }
+    sed -i "s/^theme = .*/theme = \"${helix_theme}\"/" "$cfg"
+    pkill -USR1 hx
+}
+
+apply_vscode() {
+    local theme="$1"
+    local vscode_theme="${vscode_themes[$theme]:-}"
+    local override_dir="${HOME}/.config/theme/vscode"
+    local override_file="${override_dir}/${theme}.json"
+
+    if [[ -z "$vscode_theme" ]]; then
+        echo "WARNING: No VS Code mapping for '$theme', skipping"
+        return
+    fi
+
+    [[ -f "$VSCODE_SETTINGS" ]] || {
+        echo "WARNING: VS Code settings not found, skipping"
+        return
+    }
+
+    echo "Applying VS Code theme: $vscode_theme"
+
+    local tmp
+    tmp=$(mktemp)
+
+    if [[ -f "$override_file" ]]; then
+        echo "Applying VS Code overrides: $override_file"
+        jq \
+            --arg theme "$vscode_theme" \
+            --slurpfile colors "$override_file" \
+            '
+          .["workbench.colorTheme"] = $theme
+          | .["workbench.colorCustomizations"] = $colors[0]
+          ' "$VSCODE_SETTINGS" >"$tmp"
+    else
+        jq \
+            --arg theme "$vscode_theme" \
+            '
+          .["workbench.colorTheme"] = $theme
+          | .["workbench.colorCustomizations"] = {}
+          ' "$VSCODE_SETTINGS" >"$tmp"
+    fi
+
+    if [[ -s "$tmp" ]]; then
+        mv "$tmp" "$VSCODE_SETTINGS"
+    else
+        echo "WARNING: jq produced empty output, VS Code settings unchanged"
+        rm -f "$tmp"
+    fi
+}
+
+apply_polkit() {
+    echo "Restarting polkit agent"
+    pkill -f polkit-gnome
+    sleep 0.3
+    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 2>/dev/null &
+    disown
+}
+
+apply_folder_icons() {
+    local theme="$1"
+    local icon_color="${folder_icons[$theme]:-}"
+
+    if [[ -z "$icon_color" ]]; then
+        echo "WARNING: No folder icon mapping for '$theme', skipping"
+        return
+    fi
+
+    local papirus_variant
+    if [[ "$theme" == *light* ]]; then
+        papirus_variant="Papirus-Light"
+    else
+        papirus_variant="Papirus-Dark"
+    fi
+
+    echo "Applying icon theme: $papirus_variant"
+    gsettings set org.gnome.desktop.interface icon-theme "$papirus_variant"
+
+    echo "Applying Papirus folder color: $icon_color (${papirus_variant})"
+    if command -v papirus-folders >/dev/null; then
+        papirus-folders -C "$icon_color" --theme "$papirus_variant" >/dev/null
+    else
+        echo "WARNING: papirus-folders not installed"
+    fi
+}
+
+#############################################################
+# Main
+#############################################################
+
+main() {
+    local target_theme
+
+    case "${1:-}" in
+    --list)
+        list_themes
+        exit 0
+        ;;
+    --current)
+        get_current_theme
+        exit 0
+        ;;
+    *) target_theme="$1" ;;
+    esac
+
+    validate_theme "$target_theme"
+
+    echo "Switching to theme: $target_theme"
+
+    apply_wallpaper "$target_theme"
+    apply_gtk "$target_theme"
+    apply_color_scheme "$target_theme"
+    apply_niri "$target_theme" &
+    apply_eww "$target_theme" &
+    apply_swaylock "$target_theme" &
+    apply_ghostty "$target_theme" &
+    apply_firefox "$target_theme" &
+    apply_darkreader "$target_theme" &
+    apply_rofi "$target_theme" &
+    apply_wswitch "$target_theme" &
+    apply_helix "$target_theme" &
+    apply_vscode "$target_theme" &
+    apply_polkit &
+    pkill -f xdg-desktop-portal-gtk &
+    pkill -f xdg-desktop-portal-gnome &
+    (apply_folder_icons "$target_theme" &)
+
+    wait
+
+    save_current_theme "$target_theme"
+
+    echo "Done — active theme is now '$target_theme'"
+    echo "run: 'nautilus -q' to apply GTK theme to Nautilus (if running)"
+    echo "run: 'systemctl restart --user app-com.mitchellh.ghostty.service' if you use the systemd user service"
+}
+
+main "$@"
