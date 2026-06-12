@@ -1,1 +1,0 @@
-/home/paul/Documents/niri_dots/.config/eww/scripts/sysinfo.sh
