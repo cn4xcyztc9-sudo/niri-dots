@@ -24,14 +24,15 @@ spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 spawn-at-startup "/usr/lib/gsd-rfkill"
 spawn-at-startup "awww-daemon"
 spawn-at-startup "ydotoold"
-spawn-at-startup "idlewatch"
 spawn-at-startup "kanata_cmd"
+spawn-at-startup "idle-inhibit.sh"
 spawn-sh-at-startup "tailscale systray"
 spawn-sh-at-startup "wl-clip-persist --clipboard regular --reconnect-tries 0"
 spawn-sh-at-startup "wl-paste --type text --watch cliphist store"
 spawn-sh-at-startup "ln -sfn ~/.config/eww_niri ~/.config/eww"
 spawn-sh-at-startup "eww open-many notifications bar overview-bar control-center notiflog unrevealer"
-spawn-sh-at-startup "swayidle -w timeout 900 'swaylock -f' timeout 915 'eww update brightness=1 && sysinfo.sh brightness set 1; powerprofilesctl set power-saver' resume 'eww update brightness=90 && sysinfo.sh brightness set 90; powerprofilesctl set performance' before-sleep 'swaylock -f'"
+spawn-sh-at-startup "sysinfo.sh brightness daemon"
+spawn-sh-at-startup "swayidle.sh"
 
 // niri theme
 include "colors.kdl"
@@ -202,7 +203,7 @@ binds {
     Alt+Space { spawn "bash" "-c" "rofi -show combi -drun-match-fields name -config ~/.config/rofi/launcher.rasi"; }
     Mod+V { spawn "bash" "-c" "cliphist list | rofi -dmenu -i -config ~/.config/rofi/cliphist.rasi | cliphist decode | wl-copy"; }
     Mod+Shift+V { spawn "bash" "-c" "rofi -modi emoji -show emoji -i -config ~/.config/rofi/emoji.rasi | cliphist decode | wl-copy"; }
-    Mod+Ctrl+V { spawn "switch-audio-output"; }
+    Mod+Ctrl+V { spawn "rofi-bt-audio.sh"; }
     Mod+A { spawn "~/.config/eww_niri/open_cc.sh"; }
     Mod+N { spawn "~/.config/eww_niri/open_nc.sh"; }
     Mod+Shift+d { spawn "define"; }
@@ -297,8 +298,8 @@ binds {
 
     Mod+Ctrl+Tab { toggle-column-tabbed-display; }
 
-    Print { spawn "bash" "-c" "snip"; }
-    Shift+Print { spawn "bash" "-c" "snip fullscreen"; }
+    Print { spawn "bash" "-c" "snip.sh"; }
+    Shift+Print { spawn "bash" "-c" "snip.sh fullscreen"; }
 
     Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }

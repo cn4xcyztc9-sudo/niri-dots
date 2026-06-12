@@ -20,9 +20,9 @@
 )
 
 (defvirtualkeys
-    start-vol-up  (cmd bash -c "while true; do wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1; sleep 0.15; done & echo $! > /tmp/kanata-volup.pid")
+    start-vol-up  (cmd bash -c "while true; do wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1; sleep 0.2; done & echo $! > /tmp/kanata-volup.pid")
     stop-vol-up   (cmd bash -c "kill $(cat /tmp/kanata-volup.pid) 2>/dev/null; rm -f /tmp/kanata-volup.pid")
-    start-vol-dwn (cmd bash -c "while true; do wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-; sleep 0.15; done & echo $! > /tmp/kanata-voldwn.pid")
+    start-vol-dwn (cmd bash -c "while true; do wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-; sleep 0.2; done & echo $! > /tmp/kanata-voldwn.pid")
     stop-vol-dwn  (cmd bash -c "kill $(cat /tmp/kanata-voldwn.pid) 2>/dev/null; rm -f /tmp/kanata-voldwn.pid")
 )
 

@@ -1,4 +1,6 @@
-(defpoll current_theme :interval "420h" "cat ~/.config/theme/current")
+(defpoll current_theme
+  :interval "420h"
+  "cat ~/.config/theme/current | sed 's/-light$//'")
 
 (deflisten bar_state :initial '{
     "workspaces":       [],
@@ -20,7 +22,7 @@
 (defpoll date :interval "1m" "date '+%Y-%m-%d'")
 
 (defpoll color_accent1 :interval "420h" "grep 'accent1' ./themes/active-theme.scss | grep -oE '#[0-9a-fA-F]{3,8}' | head -1")
-(defpoll color_surface2 :interval "420h" "grep 'surface2' ./themes/active-theme.scss | grep -oE '#[0-9a-fA-F]{3,8}' | head -1")
+(defpoll color_surface2 :interval "420h" "grep 'fuck' ./themes/active-theme.scss | grep -oE '#[0-9a-fA-F]{3,8}' | head -1")
 
 (defpoll wifi_icon :interval "5s" "sh ./scripts/sysinfo.sh wifi")
 (defpoll wifi_state :interval "5s" "nmcli radio wifi | grep -oE 'enabled|disabled'")

@@ -1,7 +1,7 @@
 * {
     base     : #efebd4;
     surface0 : #fdf6e3;
-    surface1 : #e6e2cc;
+    surface1 : #efebd4;
     overlay1 : #bdc3af;
     subtext  : #708089;
     text     : #5c6a72;

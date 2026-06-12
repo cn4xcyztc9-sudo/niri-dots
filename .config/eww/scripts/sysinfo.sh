@@ -36,8 +36,7 @@ volume() {
 BRIGHTNESS_CACHE="$HOME/.cache/eww-brightness"
 BRIGHTNESS_PENDING="/tmp/eww-brightness.pending"
 BRIGHTNESS_SETTING="/tmp/eww-brightness.setting"
-BRIGHTNESS_BUS_CACHE="/tmp/eww-brightness.bus"
-
+BRIGHTNESS_BUS_CACHE="$HOME/.cache/eww-brightness.bus"
 _brightness_buses() {
     if [ -f "$BRIGHTNESS_BUS_CACHE" ]; then
         cat "$BRIGHTNESS_BUS_CACHE"
@@ -53,7 +52,6 @@ _brightness_buses() {
     echo "$buses" >"$BRIGHTNESS_BUS_CACHE"
     echo "$buses"
 }
-
 brightness() {
     case "$1" in
     set)
@@ -79,16 +77,26 @@ brightness() {
         ;;
     daemon)
         while true; do
-            sleep 30
             if [ ! -f "$BRIGHTNESS_SETTING" ]; then
                 local buses first_bus val
-                buses=$(_brightness_buses) || continue
+                buses=$(_brightness_buses) || { sleep 5; continue; }
                 first_bus=$(echo "$buses" | head -1)
                 val=$(ddcutil --bus "$first_bus" getvcp 10 --json 2>/dev/null |
                     grep -oP '"current":\s*\K[0-9]+')
                 [ -n "$val" ] && echo "$val" >"$BRIGHTNESS_CACHE"
             fi
+            sleep 30
         done
+        ;;
+    save)
+        cp "$BRIGHTNESS_CACHE" "${BRIGHTNESS_CACHE}.saved" 2>/dev/null
+        ;;
+    restore)
+        local val
+        val=$(cat "${BRIGHTNESS_CACHE}.saved" 2>/dev/null) || return 1
+        echo "$val" >"$BRIGHTNESS_CACHE"
+        brightness set "$val"
+        echo "$val"
         ;;
     detect)
         rm -f "$BRIGHTNESS_BUS_CACHE"
@@ -194,10 +202,9 @@ systray() {
 usage() {
     cat <<EOF
 Usage: sysinfo.sh <module> [subcommand] [args]
-
 Modules:
   bluelight  --toggle | --status
-  brightness get | set <0-100> | daemon
+  brightness get | set <0-100> | daemon | save | restore | detect
   volume     listen | listen-muted
   wifi
   systray
