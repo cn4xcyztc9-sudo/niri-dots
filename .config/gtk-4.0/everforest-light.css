@@ -1,7 +1,7 @@
 :root {
   --base    : #efebd4;
   --surface0: #fdf6e3;
-  --surface1: #f4f0d9;
+  --surface1: #e0dcc7;
   --surface2: #efebd4;
   --overlay0: #bdc3af;
   --overlay1: #939f91;
@@ -15,7 +15,7 @@
 
 @define-color base     #efebd4;
 @define-color surface0 #fdf6e3;
-@define-color surface1 #f4f0d9;
+@define-color surface1 #e0dcc7;
 @define-color surface2 #efebd4;
 @define-color overlay0 #bdc3af;
 @define-color overlay1 #939f91;
@@ -32,9 +32,9 @@
 @define-color view_fg_color                    @text;
 @define-color accent_bg_color                  @accent;
 @define-color accent_fg_color                  @base;
-@define-color headerbar_bg_color               @surface0;
+@define-color headerbar_bg_color               @surface1;
 @define-color headerbar_fg_color               @text;
-@define-color headerbar_backdrop_color         alpha(@surface0, 0.6);
+@define-color headerbar_backdrop_color         color-mix(in srgb, @surface2 50%, @surface1);
 @define-color popover_bg_color                 @surface0;
 @define-color popover_fg_color                 @view_fg_color;
 @define-color dialog_bg_color                  @surface1;
@@ -75,7 +75,7 @@
   --dialog-fg-color:                  var(--text);
   --error-bg-color:                   var(--red);
   --headerbar-backdrop-color:         @headerbar_backdrop_color;
-  --headerbar-bg-color:               var(--surface0);
+  --headerbar-bg-color:               @headerbar_bg_color;
   --headerbar-fg-color:               var(--text);
   --popover-bg-color:                 var(--surface1);
   --popover-fg-color:                 var(--text);
