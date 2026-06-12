@@ -250,7 +250,9 @@ apply_wswitch() {
         return
     }
     ln -sf "$src" "${HOME}/.config/wswitch/themes/active-theme.ini"
-    wswitch quit && wswitch --daemon
+    wswitch quit
+    wswitch --daemon &
+    disown
 }
 
 apply_helix() {
