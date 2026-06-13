@@ -6,6 +6,10 @@ I barely know what I’m doing and this has only been tested on my device, so ym
 
 ![screenshot](./assets/screenshot2.png)
 
+![screenshot](./assets/screenshot3.png)
+
+![screenshot](./assets/screenshot4.png)
+
 ## Stuff
 
 - CachyOS
