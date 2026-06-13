@@ -17,7 +17,7 @@
 @define-color view_fg_color              @text;
 @define-color accent_bg_color            @accent;
 @define-color accent_fg_color            @base;
-@define-color headerbar_bg_color         @surface0;
+@define-color headerbar_bg_color         @base;
 @define-color headerbar_fg_color         @text;
 @define-color headerbar_backdrop_color   @base;
 @define-color popover_bg_color           @surface0;
